@@ -24,16 +24,21 @@
  * <http://www.apache.org/>.
  *
  */
+package exmaples;
 
-package javaapplication6;
-
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 /**
  * How to send a request via proxy.
@@ -42,25 +47,44 @@ import org.apache.http.util.EntityUtils;
  */
 public class ClientExecuteProxy {
 
-    public static void main(String[] args)throws Exception {
+    protected static final String ID_RESULTBOX = "result_box";
+    protected static final String ENCODING = "UTF-8";
+
+    public static void main(String[] args) throws Exception {
         CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpEntity entity = null;
+        InputStream result = null;
+        Document doc = null;
+        Element ele = null;
+
         try {
-            HttpHost target = new HttpHost("translate.google.com", 80, "http");
+            //HttpHost target = new HttpHost("translate.google.com/?langpair=zh-CN%7Cen&text=%E7%BE%8E%E5%9B%BD", 80, "http");
+            HttpHost target = new HttpHost("http://translate.google.com/?langpair=zh-CN%7Cen&text=%E7%BE%8E%E5%9B%BD");
+            target.toString();
             HttpHost proxy = new HttpHost("127.0.0.1", 1080, "http");
 
             RequestConfig config = RequestConfig.custom()
                     .setProxy(proxy)
                     .build();
-            HttpGet request = new HttpGet("/");
+            HttpGet request = new HttpGet("http://translate.google.com/?langpair=zh-CN%7Cen&text=%E7%BE%8E%E5%9B%BD");
             request.setConfig(config);
 
             System.out.println("Executing request " + request.getRequestLine() + " to " + target + " via " + proxy);
 
             CloseableHttpResponse response = httpclient.execute(target, request);
+            entity = response.getEntity();
+            entity = new BufferedHttpEntity(entity);
+            result = new BufferedInputStream(entity.getContent());
             try {
                 System.out.println("----------------------------------------");
                 System.out.println(response.getStatusLine());
-                System.out.println(EntityUtils.toString(response.getEntity()));
+                //System.out.println(EntityUtils.toString(response.getEntity()));
+                System.out.println(result);
+                doc = Jsoup.parse(result, ENCODING, "");
+                ele = doc.getElementById(ID_RESULTBOX);
+                System.out.println("----------------------------------------");
+                System.out.println(ele.text());
+                System.out.println("----------------------------------------");
             } finally {
                 response.close();
             }

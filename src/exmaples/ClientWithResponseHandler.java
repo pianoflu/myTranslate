@@ -1,3 +1,4 @@
+
 /*
  * ====================================================================
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -25,7 +26,7 @@
  *
  */
 
-package javaapplication6;
+package exmaples;
 
 import java.io.IOException;
 
