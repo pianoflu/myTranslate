@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package javaapplication6;
+package myTranslate;
 
 import java.io.IOException;
 import java.io.InputStream;
-import static javaapplication6.TranslateUtil.ENCODING;
+import static myTranslate.TranslateUtil.ENCODING;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -24,7 +24,7 @@ import org.jsoup.nodes.Element;
  *
  * @author _pianoflu
  */
-public class JavaApplication6 {
+public class MyTranslate {
 
     /**
      * @param args the command line arguments

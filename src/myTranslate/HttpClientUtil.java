@@ -1,4 +1,4 @@
-package javaapplication6;
+package myTranslate;
 
 import java.io.BufferedInputStream;
 import java.io.File;
